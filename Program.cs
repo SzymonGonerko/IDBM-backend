@@ -1,3 +1,4 @@
+using IDBM;
 using NLog.Web;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -5,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddTransient<IWeatherForecastService, WeatherForecastService>();
 builder.Services.AddControllers();
 
 
