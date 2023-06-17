@@ -9,9 +9,7 @@ namespace IDBM.entities
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Movie>()
-                .Property(r => r.Title)
-                .HasMaxLength(100);
+
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -1,4 +1,5 @@
 using IDBM;
+using IDBM.entities;
 using NLog.Web;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,7 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddTransient<IWeatherForecastService, WeatherForecastService>();
+builder.Services.AddDbContext<MovieDbContext>();
+builder.Services.AddScoped<MoviesSeeder>();
 builder.Services.AddControllers();
 
 
@@ -18,6 +20,11 @@ builder.Host.UseNLog();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+
+var scope = app.Services.CreateScope();
+var seeder = scope.ServiceProvider.GetRequiredService<MoviesSeeder>();
+seeder.Seed();
+
 
 app.UseHttpsRedirection();
 
