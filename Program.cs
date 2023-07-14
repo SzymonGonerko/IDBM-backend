@@ -11,6 +11,17 @@ builder.Services.AddDbContext<MovieDbContext>();
 builder.Services.AddScoped<MoviesSeeder>();
 builder.Services.AddControllers();
 
+var provider = builder.Services.BuildServiceProvider();
+var config = provider.GetRequiredService<IConfiguration>();
+builder.Services.AddCors(setup => 
+{
+    var frontendURL = config.GetValue<string>("Frontend_url");
+    setup.AddDefaultPolicy(builder => 
+    {
+        builder.WithOrigins(frontendURL).AllowAnyMethod().AllowAnyHeader();
+    });
+});
+
 
 // NLog: Setup NLog for Dependency injection
 builder.Logging.ClearProviders();
@@ -27,6 +38,8 @@ seeder.Seed();
 
 
 app.UseHttpsRedirection();
+
+app.UseCors();
 
 app.UseRouting();
 
