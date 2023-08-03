@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@react-spring/three": "^9.7.3",
     "@react-three/drei": "^9.77.1",
     "@react-three/fiber": "^8.13.3",
     "@react-three/postprocessing": "^2.14.11",
@@ -13,7 +14,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
-    "three-stdlib": "^2.23.10",
+    "three": "^0.154.0",
+    "three-stdlib": "^2.23.13",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

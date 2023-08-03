@@ -24,13 +24,13 @@ const App = () => {
   return (
     <Canvas camera={{ position: [0.5, 1, 400], fov: 60 }}>
       <color attach="background" args={['black']} />
-      <fog attach="fog" args={['black', 10, 40]} />
+      {/* <fog attach="fog" args={['black', 10, 30]} /> */}
       <Suspense fallback={null}>
         <Effects disableGamma>
           <unrealBloomPass threshold={0.5} strength={0.5} radius={0.8} />
         </Effects>
 
-        <ambientLight intensity={2} />
+        <ambientLight intensity={1.9} />
 
         <Scene />
         <Ground position={[0, -1, 0]} />
