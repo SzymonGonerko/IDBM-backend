@@ -9,7 +9,7 @@ import trailers from '../../assets/trailers.mp4';
 
 export const Hero = ({ onClick }) => {
   const font = new FontLoader().parse(playRegularJson);
-  const [bloom, setbloom] = useState(1.1);
+  const [bloom, setbloom] = useState(0.1);
   const [hovered, hover] = useState(true);
   const [video] = useState(() =>
     Object.assign(document.createElement('video'), {
@@ -26,7 +26,7 @@ export const Hero = ({ onClick }) => {
 
   useFrame((s) => {
     if (!hovered) {
-      setbloom(Math.abs(Math.cos(s.clock.getElapsedTime()) / 2.5) + 0.9);
+      setbloom(Math.abs(Math.cos(s.clock.getElapsedTime()) / 5.5) / 2);
     }
     if (hovered && bloom > 1) {
       setbloom((p) => p - 0.02);
@@ -38,16 +38,16 @@ export const Hero = ({ onClick }) => {
       <group position={[0, 0.7, 351]}>
         <Text font={playBold} fontSize={2} letterSpacing={-0.06}>
           IDBM
-          <meshBasicMaterial toneMapped={false}>
+          <meshLambertMaterial color={[0.3, 0.3, 0.3]} transparent opacity={0.6} toneMapped={false}>
             <videoTexture attach="map" args={[video]} />
-          </meshBasicMaterial>
+          </meshLambertMaterial>
         </Text>
 
         <group position={[-0.08, -0.16, 0]}>
-          <Text font={playRegular} position={[0.85, -0.75, 0]} fontSize={0.2}>
+          <Text color={'#888888'} font={playRegular} position={[0.85, -0.75, 0]} fontSize={0.2}>
             Interactive database movies
           </Text>
-          <Text font={playRegular} position={[0.555, -1, 0]} fontSize={0.2}>
+          <Text color={'#888888'} font={playRegular} position={[0.555, -1, 0]} fontSize={0.2}>
             with +60 000 records!
           </Text>
         </group>
@@ -66,8 +66,8 @@ export const Hero = ({ onClick }) => {
             args={[1.5, 0.4, 0.2]}
           >
             <meshStandardMaterial
-              color={[0.15, 0.1, bloom - 0.5]}
-              emissive={[0.01, 0.35 + bloom, bloom]}
+              color={[0.05, bloom + 0.1, bloom + 0.1]}
+              // emissive={[0.01, 0.35 + bloom, bloom]}
               toneMapped={false}
             />
           </RoundedBox>

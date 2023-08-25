@@ -2,12 +2,11 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { CameraControls } from '@react-three/drei';
 import { Hero } from './partials/Hero';
-
 import { extend } from '@react-three/fiber';
 import { TextGeometry } from 'three-stdlib';
 import { SerachBoard } from './partials/SearchBoard';
-
 extend({ TextGeometry });
+import axios from 'axios';
 
 export const Scene = () => {
   const camRef = useRef();
@@ -38,20 +37,26 @@ export const Scene = () => {
         // camRef.current.setTarget(-5, 0, -300);
       });
     }, 10);
-
     setTimeout(() => {
       setEndMoveCamera(false);
     }, 1000);
+  };
+
+  const searchByTitle = async (title) => {
+    let val = await axios.get('https://localhost:7089/Movies' + '/' + title).then((r) => {
+      return r.data.length;
+    });
+    return val;
   };
 
   return (
     <>
       <CameraControls
         ref={camRef}
-        //  mouseButtons={{ left: 8, middle: 8, right: 2, wheel: 8 }}
+        // mouseButtons={{ left: 8, middle: 8, right: 2, wheel: 8 }}
       />
       {endMoveCamera && <Hero onClick={goToSearch} />}
-      <SerachBoard onClick={goToSearch} />
+      <SerachBoard searchByTitle={searchByTitle} />
     </>
   );
 };

@@ -23,7 +23,7 @@ export const Ground = (props) => {
       <MeshReflectorMaterial
         blur={[200, 100]}
         resolution={1024}
-        mirror={0.5}
+        mirror={0.7}
         // mirror={0.8}
         mixBlur={120}
         mixStrength={15}

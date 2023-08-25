@@ -11,13 +11,13 @@ export const TopBar = ({ handleClose }) => {
     spring: active ? 1 : 0,
     config: { mass: 1, tension: 800, friction: 100, precision: 0.00001 }
   });
-  const colorSpringIn = spring.to([0, 1], ['#aaaaaa', '#bb0000']);
-  const colorSpringOut = spring.to([1, 0], ['#bb0000', '#aaaaaa']);
+  const colorSpringIn = spring.to([0, 1], ['#545454', '#540000']);
+  const colorSpringOut = spring.to([1, 0], ['#540000', '#545454']);
 
   return (
     <>
       <CustomRoundedBox
-        color={[0.23, 0.23, 0.23]}
+        color={[0.07, 0.07, 0.07]}
         args={[4.96, 0.28, 0.05]}
         position={[0, 1.36, 0.1]}
       >
