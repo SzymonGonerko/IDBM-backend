@@ -1,62 +1,68 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { useFrame } from '@react-three/fiber';
+import React, { useState, useRef } from 'react';
 import { CameraControls } from '@react-three/drei';
 import { Hero } from './partials/Hero';
 import { extend } from '@react-three/fiber';
 import { TextGeometry } from 'three-stdlib';
 import { SerachBoard } from './partials/SearchBoard';
+import { Gallery } from './partials/Gallery';
+import { useCameraMove } from '../hook/useCameraMove';
 extend({ TextGeometry });
-import axios from 'axios';
+import { useSearch } from '../hook/useSearch';
 
 export const Scene = () => {
-  const camRef = useRef();
-  const [search, setSearch] = useState(false);
-  const [intro, setIntro] = useState(false);
-  const [endMoveCamera, setEndMoveCamera] = useState(true);
+  const cameraRef = useRef();
+  const {searchByTitle} = useSearch()
+  const { goToNextPage, goToSearch, goToGallery, moveTo, setParts, parts } = useCameraMove(cameraRef);
 
-  useEffect(() => {
-    camRef.current.smoothTime = 1;
-    camRef.current.setTarget(0, 0, 350).then(() => setIntro(true));
-    camRef.current.dollySpeed = 0.02;
-  }, []);
+  const [movies, setMovies] = useState([]);
+  const [close, setClose] = useState(false);
+  const [wheel, setWheel] = useState(8);
 
-  useFrame((s) => {
-    if (!search && intro) {
-      camRef.current?.setPosition(-0.5 + s.mouse.x * 2, 1, 355 + s.mouse.y, true);
-    }
-    if (camRef.current.getPosition().z > 345 && search) {
-      camRef.current.setPosition(-5, 1, 320, true);
-    }
-  });
 
-  const goToSearch = () => {
-    setSearch(true);
-    setTimeout(() => {
-      camRef.current.smoothTime = 1.5;
-      camRef.current.setLookAt(-5, 1, 320, -5, 1, 315, true).then(() => {
-        // camRef.current.setTarget(-5, 0, -300);
-      });
-    }, 10);
-    setTimeout(() => {
-      setEndMoveCamera(false);
-    }, 1000);
+  const wheelSetting = (behavior) => {
+    setWheel(behavior);
   };
 
-  const searchByTitle = async (title) => {
-    let val = await axios.get('https://localhost:7089/Movies' + '/' + title).then((r) => {
-      return r.data.length;
-    });
-    return val;
+  const backToSearchBoard = () => {
+    setClose(false);
+    setMovies([]);
+    moveTo(-5, 1, 320)
+    setTimeout(() => setParts([false, true, false]), 1500);
+  };
+
+  const handleSearchByTitle = async (title) => {
+    let response = await searchByTitle(title)
+    setMovies(response)
+    if (response.length > 0)
+        setTimeout(() => {
+          goToGallery();
+          setParts([false, false, true]);
+        }, 3000);
+        return response.length
   };
 
   return (
     <>
       <CameraControls
-        ref={camRef}
-        // mouseButtons={{ left: 8, middle: 8, right: 2, wheel: 8 }}
+        ref={cameraRef}
+        mouseButtons={{ left: 8, middle: 8, right: 2, wheel: wheel }}
       />
-      {endMoveCamera && <Hero onClick={goToSearch} />}
-      <SerachBoard searchByTitle={searchByTitle} />
+      {parts[0] && <Hero onClick={goToSearch} />}
+      {parts[1] && <SerachBoard
+                      closeWindow={() => setClose(true)}
+                      openWindow={() => setClose(false)}
+                      close={close}
+                      handleSearchByTitle={handleSearchByTitle}
+                      wheelSetting={wheelSetting}
+                    />}
+      {parts[2] && 
+        <Gallery
+          data={movies}
+          goToNextPage={goToNextPage}
+          backToSearchBoard={backToSearchBoard}
+          position={[-5, 1, 304]}
+        />
+      }
     </>
   );
 };

@@ -9,13 +9,16 @@ import { Question } from './Question';
 export const FirstQuestion = ({ onSelect, onNext }) => {
   const [showNextBtn, setShowNextBtn] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
-  const { show, hide } = useSpring({
+  const [onHoverAction, setOnHoverAction] = useState(false);
+  const { show, hide, hover } = useSpring({
     show: showNextBtn ? 1 : 0,
     hide: isHidden ? 1 : 0,
+    hover: onHoverAction ? 1 : 0,
     config: { mass: 1, tension: 800, friction: 100, precision: 0.00001 }
   });
   const showNext = show.to([0, 1], [0, 0.6]);
   const getHide = hide.to([0, 1], [0, -0.5]);
+  const colorOnHover = hover.to([0, 1], ['#455045', '#455545']);
 
   const [boxes, setBoxes] = useState([
     {
@@ -56,7 +59,7 @@ export const FirstQuestion = ({ onSelect, onNext }) => {
   return (
     <mesh name="question">
       <a.group position-z={getHide}>
-        <Question args={[3, 0.28, 0.2]}>Do you looking for movies by...?</Question>
+        <Question args={[3.7, 0.28, 0.2]}>Do you looking for movies by...?</Question>
 
         {boxes.map((el, i) => (
           <CustomRoundedBox
@@ -80,12 +83,13 @@ export const FirstQuestion = ({ onSelect, onNext }) => {
         ))}
 
         {showNextBtn && (
-          <a.group position-z={showNext} onClick={handleClickNext}>
-            <CustomRoundedBox
-              color={[0.05, 0.09, 0.05]}
-              args={[1, 0.28, 0.2]}
-              position={[1.6, -1, -0.5]}
-            >
+          <a.group
+            onPointerOver={() => setOnHoverAction(true)}
+            onPointerOut={() => setOnHoverAction(false)}
+            position-z={showNext}
+            onClick={handleClickNext}
+          >
+            <CustomRoundedBox color={colorOnHover} args={[1, 0.28, 0.2]} position={[1.6, -1, -0.5]}>
               <Text
                 color={'black'}
                 font={playBold}

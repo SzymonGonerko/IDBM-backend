@@ -38,7 +38,7 @@ export const Hero = ({ onClick }) => {
       <group position={[0, 0.7, 351]}>
         <Text font={playBold} fontSize={2} letterSpacing={-0.06}>
           IDBM
-          <meshLambertMaterial color={[0.3, 0.3, 0.3]} transparent opacity={0.6} toneMapped={false}>
+          <meshLambertMaterial color={[0.1, 0.1, 0.1]} toneMapped={false}>
             <videoTexture attach="map" args={[video]} />
           </meshLambertMaterial>
         </Text>
@@ -48,7 +48,7 @@ export const Hero = ({ onClick }) => {
             Interactive database movies
           </Text>
           <Text color={'#888888'} font={playRegular} position={[0.555, -1, 0]} fontSize={0.2}>
-            with +60 000 records!
+            with +55 000 records!
           </Text>
         </group>
 

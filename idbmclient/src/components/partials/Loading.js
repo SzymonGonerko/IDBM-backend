@@ -1,15 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { RoundedBox, Trail, Float, Box, Sphere, Text } from '@react-three/drei';
-import { FirstQuestion } from './FirstQuestions';
-import { useFrame, useThree, extend } from '@react-three/fiber';
-import { TopBar } from './TopBar';
-import { useSpring } from '@react-spring/three';
-import { a } from '@react-spring/three';
-import { InsertTitle } from './InsertTitle.js';
-import { Question } from './Question.js';
-import { SearchButton } from './SearchButton';
+import { Trail, Text } from '@react-three/drei';
+import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
-import { CustomRoundedBox } from './CustomRoundedBox';
 import playRegular from '../../assets/fonts/Play-Regular.ttf';
 
 export const Loading = ({ result }) => {
@@ -27,7 +19,8 @@ export const Loading = ({ result }) => {
   }, [result]);
 
   useFrame((state) => {
-    const t = state.clock.getElapsedTime() * 2;
+    let gg = result > 0 || result === 0 ? 2 : 3;
+    const t = state.clock.getElapsedTime() * gg;
     ref.current.position.set(Math.sin(t) * 1.2 - 5, Math.cos(t) * 1.2 + 1, 314);
   });
 

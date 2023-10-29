@@ -19,10 +19,10 @@ export const Ground = (props) => {
 
   return (
     <mesh {...props} rotation={[-Math.PI / 2, 0, -Math.PI / 2]}>
-      <planeGeometry args={[800, 100]} />
+      <planeGeometry args={[800, 50]} />
       <MeshReflectorMaterial
         blur={[200, 100]}
-        resolution={1024}
+        resolution={700}
         mirror={0.7}
         // mirror={0.8}
         mixBlur={120}
