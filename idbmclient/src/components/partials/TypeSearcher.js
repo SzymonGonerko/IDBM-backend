@@ -19,7 +19,6 @@ export const TypeSearcher = (props) => {
   const backColor = back.to([0, 1], ['#62451c', '#64471e']);
   const inputColor = insert.to([0, 1], ['#494949', '#495050']);
 
-
   return (
     <>
       <Question args={[2.2, 0.28, 0.2]}>Insert your title:</Question>
@@ -34,16 +33,16 @@ export const TypeSearcher = (props) => {
       >
         Back
       </ActionButton>
-        <ActionButton
-          color={searchColor}
-          onPointerOver={() => setOnHoverSearch(true)}
-          onPointerOut={() => setOnHoverSearch(false)}
-          position={[1.6, -1, -0.5]}
-          onClick={searchMovie}
-          z={shearchBtn}
-        >
-          Search
-        </ActionButton>
+      <ActionButton
+        color={searchColor}
+        onPointerOver={() => setOnHoverSearch(true)}
+        onPointerOut={() => setOnHoverSearch(false)}
+        position={[1.6, -1, -0.5]}
+        onClick={searchMovie}
+        z={shearchBtn}
+      >
+        Search
+      </ActionButton>
     </>
   );
 };

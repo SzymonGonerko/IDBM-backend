@@ -1,10 +1,7 @@
 import React, { useState, useRef } from 'react';
-import {
-  Mask,
-  useMask
-} from '@react-three/drei';
+import { Mask, useMask } from '@react-three/drei';
 
-export const New = ({ children }) => {
+export const PortalBox = ({ children }) => {
   const group = useRef();
 
   return (

@@ -4,7 +4,7 @@ import { ActionButton } from './ActionButton.js';
 import { CustomRoundedBox } from './CustomRoundedBox.js';
 import { Text } from '@react-three/drei';
 import playBold from '../../assets/fonts/Play-Bold.ttf';
-import { New } from './New.js';
+import { PortalBox } from './PortalBox.js';
 import { a } from '@react-spring/three';
 
 const genres = [
@@ -33,10 +33,11 @@ const genres = [
 
 export const CheckSearcher = (props) => {
   const { goBack, wheelSetting } = props;
+  const [genresDetails, setGeneresDetails] = useState([]);
   const [boxPosition, setBoxPosition] = useState([]);
-
   const [onHoverBack, setOnHoverBack] = useState(false);
   const [onHoverSearch, setOnHoverSearch] = useState(false);
+  const [selected, setSelected] = useState();
   const [jj, setJj] = useState(0);
 
   const { back, search, pos } = useSpring({
@@ -68,6 +69,13 @@ export const CheckSearcher = (props) => {
   };
 
   useEffect(() => {
+    setGeneresDetails(() => {
+      const arr = genres.map((el) => {
+        return { genere: el, isSelected: false };
+      });
+      return arr;
+    });
+
     const x = Math.trunc(genres.length / 3);
     const arr = [];
     let bb = 0.5;
@@ -88,9 +96,18 @@ export const CheckSearcher = (props) => {
     wheelSetting(8);
   };
 
+  const test = (event, i) => {
+    event.stopPropagation();
+    setGeneresDetails((p) => {
+      const [...arr] = p;
+      arr[i].isSelected = !arr[i].isSelected;
+      return arr;
+    });
+  };
+
   return (
     <>
-      <New>
+      <PortalBox>
         <a.group position={[-3.5, 0.1, 0]} position-x={movee}>
           {genres.map((el, i) => {
             return (
@@ -99,12 +116,15 @@ export const CheckSearcher = (props) => {
                 color={[0.06, 0.06, 0.06]}
                 args={[1, 0.28, 0.2]}
                 position={boxPosition[i]}
+                onClick={(e) => test(e, i)}
+                isSelected={genresDetails[i]?.isSelected}
                 portal
                 onHover
               >
                 <Text
                   color={'black'}
                   font={playBold}
+                  onClick={null}
                   position={[0, 0, 0.11]}
                   fontSize={0.19}
                   letterSpacing={-0.06}
@@ -115,7 +135,7 @@ export const CheckSearcher = (props) => {
             );
           })}
         </a.group>
-      </New>
+      </PortalBox>
 
       <ActionButton
         onClick={onGoBack}

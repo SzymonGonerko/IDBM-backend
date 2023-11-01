@@ -9,10 +9,15 @@ import { TypeSearcher } from './TypeSearcher';
 import { CheckSearcher } from './CheckSearcher';
 import { useFocuse } from '../../hook/useFocuse';
 
-
-export const SerachBoard = ({ handleSearchByTitle, closeWindow, openWindow, close, wheelSetting }) => {
-  const {handleFocuse, text, focuse, enter} = useFocuse()
-  const light = useRef()
+export const SerachBoard = ({
+  handleSearchByTitle,
+  closeWindow,
+  openWindow,
+  close,
+  wheelSetting
+}) => {
+  const { handleFocuse, text, focuse, enter } = useFocuse();
+  const light = useRef();
   const [answers, setAnswers] = useState(['', text]);
   const [nextQuestion, setNextQuestion] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -24,7 +29,6 @@ export const SerachBoard = ({ handleSearchByTitle, closeWindow, openWindow, clos
   const scaleBoard = scale.to([0, 1], [1, 0]);
   const shearchBtn = showSearchBtn.to([0, 1], [0, 0.6]);
   const [result, setResult] = useState(false);
-  
 
   const selectFirstAnswer = (arg) => {
     setAnswers((p) => {
@@ -67,8 +71,6 @@ export const SerachBoard = ({ handleSearchByTitle, closeWindow, openWindow, clos
     setNextQuestion(false);
   };
 
-
-
   return (
     <>
       <a.group scale={scaleBoard} position={[-5, 1, 315]}>
@@ -80,7 +82,6 @@ export const SerachBoard = ({ handleSearchByTitle, closeWindow, openWindow, clos
           args={[5, 3, 0.2]}
         >
           <meshStandardMaterial color={[0.05, 0.05, 0.05]} toneMapped={false} />
-
 
           <TopBar handleClose={closeWindow} />
           {!nextQuestion && <FirstQuestion onSelect={selectFirstAnswer} onNext={onNext} />}

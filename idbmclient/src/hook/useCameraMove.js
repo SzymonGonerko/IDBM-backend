@@ -8,11 +8,11 @@ export const useCameraMove = (reff) => {
   const [intro, setIntro] = useState(false);
   const [search, setSearch] = useState(false);
   const [endMoveCamera, setEndMoveCamera] = useState(true);
-  const [parts, setParts] = useState([true, false, false])
+  const [parts, setParts] = useState([true, false, false]);
 
   const moveTo = (x, y, z) => {
     reff.current.setPosition(x, y, z, true);
-  }
+  };
 
   const goToSearch = () => {
     setSearch(true);
@@ -24,7 +24,7 @@ export const useCameraMove = (reff) => {
     }, 10);
     setTimeout(() => {
       setEndMoveCamera(false);
-      setParts([false, true, false])
+      setParts([false, true, false]);
     }, 1000);
   };
 
@@ -55,5 +55,15 @@ export const useCameraMove = (reff) => {
     reff?.current?.setPosition(-5, 1, 310, true);
   };
 
-  return { goToNextPage, intro, search, endMoveCamera, goToSearch, goToGallery, parts, setParts, moveTo };
+  return {
+    goToNextPage,
+    intro,
+    search,
+    endMoveCamera,
+    goToSearch,
+    goToGallery,
+    parts,
+    setParts,
+    moveTo
+  };
 };
