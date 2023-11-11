@@ -11,7 +11,7 @@ import { useSearch } from '../hook/useSearch';
 
 export const Scene = () => {
   const cameraRef = useRef();
-  const { searchByTitle } = useSearch();
+  const { searchByTitle, searchByGenre } = useSearch();
   const { goToNextPage, goToSearch, goToGallery, moveTo, setParts, parts } =
     useCameraMove(cameraRef);
 
@@ -41,6 +41,18 @@ export const Scene = () => {
     return response.length;
   };
 
+  const handleSearchByGenre = async (genre) => {
+    let response = await searchByGenre(genre);
+    setMovies(response);
+    if (response.length > 0)
+      setTimeout(() => {
+        goToGallery();
+        wheelSetting(8)
+        setParts([false, false, true]);
+      }, 3000);
+    return response.length;
+  };
+
   return (
     <>
       <CameraControls
@@ -54,6 +66,7 @@ export const Scene = () => {
           openWindow={() => setClose(false)}
           close={close}
           handleSearchByTitle={handleSearchByTitle}
+          handleSearchByGenre={handleSearchByGenre}
           wheelSetting={wheelSetting}
         />
       )}

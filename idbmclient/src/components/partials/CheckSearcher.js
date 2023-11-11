@@ -32,12 +32,10 @@ const genres = [
 ];
 
 export const CheckSearcher = (props) => {
-  const { goBack, wheelSetting } = props;
-  const [genresDetails, setGeneresDetails] = useState([]);
+  const { goBack, wheelSetting, searchMovie, genresDetails, setGeneresDetails } = props;
   const [boxPosition, setBoxPosition] = useState([]);
   const [onHoverBack, setOnHoverBack] = useState(false);
   const [onHoverSearch, setOnHoverSearch] = useState(false);
-  const [selected, setSelected] = useState();
   const [jj, setJj] = useState(0);
 
   const { back, search, pos } = useSpring({
@@ -71,7 +69,7 @@ export const CheckSearcher = (props) => {
   useEffect(() => {
     setGeneresDetails(() => {
       const arr = genres.map((el) => {
-        return { genere: el, isSelected: false };
+        return { genre: el, isSelected: false };
       });
       return arr;
     });
@@ -104,6 +102,11 @@ export const CheckSearcher = (props) => {
       return arr;
     });
   };
+
+  const test2 = async (e) => {
+    e.stopPropagation()
+    searchMovie()
+  }
 
   return (
     <>
@@ -151,6 +154,7 @@ export const CheckSearcher = (props) => {
         color={searchColor}
         onPointerOver={() => setOnHoverSearch(true)}
         onPointerOut={() => setOnHoverSearch(false)}
+        onClick={(e) => test2(e)}
         position={[1.6, -1, -0.5]}
         z={0.6}
       >
