@@ -36,9 +36,9 @@ export const Hero = ({ onClick }) => {
   return (
     <>
       <group position={[0, 0.7, 351]}>
-        <Text font={playBold} fontSize={2} letterSpacing={-0.06}>
+        <Text font={playBold} fontSize={2.1} letterSpacing={-0.08}>
           IDBM
-          <meshLambertMaterial color={[0.1, 0.1, 0.1]} toneMapped={false}>
+          <meshLambertMaterial color={[0.18, 0.18, 0.18]} toneMapped={false}>
             <videoTexture attach="map" args={[video]} />
           </meshLambertMaterial>
         </Text>

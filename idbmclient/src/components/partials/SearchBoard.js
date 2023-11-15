@@ -10,7 +10,31 @@ import { TypeSearcher } from './TypeSearcher';
 import { CheckSearcher } from './CheckSearcher';
 import { useFocuse } from '../../hook/useFocuse';
 import back from '../../assets/back.jpg';
+import { useSearch } from '../../hook/useSearch';
 
+const genres = [
+  'Comedy',
+  'Romance',
+  'Horror',
+  'Thriller',
+  'Fantasy',
+  'Action',
+  'Adventure',
+  'Sci-Fi',
+  'Drama',
+  'War',
+  'Family',
+  'Mystery',
+  'Biography',
+  'Musical',
+  'Music',
+  'Western',
+  'Film-Noir',
+  'Animation',
+  'History',
+  'Sport',
+  'Music'
+];
 
 export const SerachBoard = ({
   handleSearchByTitle,
@@ -21,8 +45,10 @@ export const SerachBoard = ({
   wheelSetting
 }) => {
   const texture = useTexture(back)
+  const {getInitData} = useSearch()
   const { handleFocuse, text, focuse, enter } = useFocuse();
   const [answers, setAnswers] = useState(['', text]);
+  const [initData, setInitData] = useState()
   const [nextQuestion, setNextQuestion] = useState(false);
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState(1)
@@ -36,12 +62,29 @@ export const SerachBoard = ({
   const shearchBtn = showSearchBtn.to([0, 1], [0, 0.6]);
   const testing = filters.to([0, 1, 2], ["#465046", "#645050", "#505064"]);
   const [result, setResult] = useState(false);
-  const [genresDetails, setGeneresDetails] = useState([]);
+  const [genresDetails, setGeneresDetails] = useState(genres);
 
 
   texture.wrapS = THREE.RepeatWrapping;
   texture.wrapT = THREE.RepeatWrapping;
   texture.repeat.set(0.19, 0.375);
+
+  useEffect(() => {
+    setGeneresDetails((p) => {
+      const [...arr] = p;
+      const newState = arr.map((el) => {
+            return { genre: el, isSelected: false };
+          });
+          return newState;
+        });
+    getInitData().then(r => {
+      let newState = {};
+      Object.entries(r).forEach(([key, value]) => {
+        newState[key] = value.map(el => {return {genre: el, isSelected: false}})
+      })
+      setInitData(newState)
+    })
+  }, [])
 
   const selectFirstAnswer = (arg) => {
     setAnswers((p) => {
@@ -128,6 +171,8 @@ export const SerachBoard = ({
               goBack={goBack}
               answers={text}
               searchMovie={searchMovie}
+              hints={initData.titles}
+              question={'Insert your title:'}
             />
           )}
           {nextQuestion && answers[0] == 'genre' && (
@@ -138,6 +183,17 @@ export const SerachBoard = ({
               setGeneresDetails={setGeneresDetails}
               searchMovie={searchMovie}
               wheelSetting={wheelSetting}
+            />
+          )}
+          {nextQuestion && answers[0] == 'director' && (
+            <TypeSearcher
+              activeInput={focuse}
+              shearchBtn={shearchBtn}
+              goBack={goBack}
+              answers={text}
+              hints={initData.directors}
+              searchMovie={searchMovie}
+              question={'Your lovly director is:'}
             />
           )}
         </RoundedBox>

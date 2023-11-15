@@ -5,7 +5,7 @@ import { Question } from './Question.js';
 import { ActionButton } from './ActionButton.js';
 
 export const TypeSearcher = (props) => {
-  const { goBack, answers, searchMovie, shearchBtn, activeInput } = props;
+  const { goBack, answers, searchMovie, shearchBtn, activeInput, question, hints } = props;
   const [onHoverBack, setOnHoverBack] = useState(false);
   const [onHoverSearch, setOnHoverSearch] = useState(false);
 
@@ -21,7 +21,7 @@ export const TypeSearcher = (props) => {
 
   return (
     <>
-      <Question args={[2.2, 0.28, 0.2]}>Insert your title:</Question>
+      <Question position={[-1.2, 0.8, 0.1]} args={[1.8, 0.28, 0.2]}>{question}</Question>
       <InsertTitle color={inputColor} word={activeInput ? [answers, '|'] : answers} />
       <ActionButton
         onClick={goBack}

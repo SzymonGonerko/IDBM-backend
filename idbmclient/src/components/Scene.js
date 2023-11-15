@@ -60,7 +60,7 @@ export const Scene = () => {
         mouseButtons={{ left: 8, middle: 8, right: 2, wheel: wheel }}
       />
       {parts[0] && <Hero onClick={goToSearch} />}
-      {parts[1] && (
+      
         <SerachBoard
           closeWindow={() => setClose(true)}
           openWindow={() => setClose(false)}
@@ -69,7 +69,7 @@ export const Scene = () => {
           handleSearchByGenre={handleSearchByGenre}
           wheelSetting={wheelSetting}
         />
-      )}
+        
       {parts[2] && (
         <Gallery
           data={movies}

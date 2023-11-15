@@ -17,8 +17,16 @@ body,
   overflow: hidden;
 }
 
+@media (max-width: 500px) {
+  #root {
+    width: 100vh;
+    transform: rotate(90deg) !important;
+  }
+}
+
 canvas {
   opacity: 0;
   touch-action: none;
+  width: 50px;
   animation: fade-in 2s ease 0.5s forwards;
 }

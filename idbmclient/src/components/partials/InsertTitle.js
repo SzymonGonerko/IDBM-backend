@@ -6,7 +6,7 @@ import playBold from '../../assets/fonts/Play-Bold.ttf';
 export const InsertTitle = ({ color, word }) => {
   return (
     <>
-      <CustomRoundedBox color={color} args={[2.2, 0.28, 0.2]} position={[0, 0, 0.1]} name="input">
+      <CustomRoundedBox color={color} args={[2, 0.28, 0.2]} position={[1, 0.8, 0.1]} name="input">
         <Text
           color={'black'}
           font={playBold}

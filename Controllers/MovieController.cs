@@ -1,6 +1,7 @@
 ﻿using IDBM.entities;
 using Microsoft.AspNetCore.Mvc;
 
+
 namespace IDBM.Controllers
 {
     [Route("Movies")]
@@ -13,11 +14,44 @@ namespace IDBM.Controllers
         }
 
 
-        [HttpGet("getAll")]
-        public ActionResult<IEnumerable<Movie>> GetAll()
+        [HttpGet("getAllTitle")]
+        public ActionResult GetAllTitle()
         {
             var movies = _dbContext.Movies.ToList();
-            return Ok(movies);
+            var titles = new List<string>();
+
+            foreach (var movie in movies)
+            {
+                titles.Add(movie.Title);
+            }
+
+            MoviesList movieTitles = new MoviesList(titles);
+            return Ok(movieTitles.GroupedByTag);
+        }
+
+        [HttpGet("getAllDirectors")]
+        public ActionResult GetAllDirectors()
+        {
+            var movies = _dbContext.Movies.ToList();
+            var titles = new List<string>();
+            
+            foreach (var movie in movies)
+            {
+                List<string> arr = movie.Directors.Split(new char[] { ',' }).ToList();
+                foreach (var director in arr)
+                {
+                    var withoutBrackets = director.Replace("[", string.Empty).Replace("]", string.Empty);
+                    var withoutQuote = withoutBrackets.Replace("'", string.Empty).Replace("'", string.Empty);
+                    if (withoutQuote != "")
+                    {
+                        titles.Add(withoutQuote);
+                    }
+                }
+
+            }
+            var result = titles.Distinct().ToList();
+            MoviesList movieDirectors = new MoviesList(result);
+            return Ok(movieDirectors.GroupedByTag);
         }
 
 
