@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Text } from '@react-three/drei';
 import { CustomRoundedBox } from './CustomRoundedBox';
 import playBold from '../../assets/fonts/Play-Bold.ttf';
@@ -7,13 +7,18 @@ import { usePagination } from '../../hook/usePagination';
 import { MovieCard } from './MovieCard';
 import { GalleryBoard } from './GalleryBoard';
 
-export const Gallery = ({ position, data, goToNextPage, backToSearchBoard }) => {
+export const Gallery = ({ position, data, goToNextPage, backToSearchBoard, wheelSetting }) => {
   const { list, page, nextPage, previousPage, howManyLeft, showMore } = usePagination(data, 20);
 
   const handleClickMore = (e) => {
     e.stopPropagation();
     showMore(goToNextPage);
   };
+
+  useEffect(() => {
+    wheelSetting(8)
+    return () => wheelSetting(undefined)
+  }, [])
 
   const pos = (num) => {
     if (num % 2 == 0) {

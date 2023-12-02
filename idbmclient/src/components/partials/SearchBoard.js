@@ -10,7 +10,6 @@ import { TypeSearcher } from './TypeSearcher';
 import { CheckSearcher } from './CheckSearcher';
 import { useFocuse } from '../../hook/useFocuse';
 import back from '../../assets/back.jpg';
-import { useSearch } from '../../hook/useSearch';
 
 const genres = [
   'Comedy',
@@ -45,10 +44,8 @@ export const SerachBoard = ({
   wheelSetting
 }) => {
   const texture = useTexture(back)
-  const {getInitData} = useSearch()
   const { handleFocuse, text, focuse, enter } = useFocuse();
   const [answers, setAnswers] = useState(['', text]);
-  const [initData, setInitData] = useState()
   const [nextQuestion, setNextQuestion] = useState(false);
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState(1)
@@ -73,17 +70,10 @@ export const SerachBoard = ({
     setGeneresDetails((p) => {
       const [...arr] = p;
       const newState = arr.map((el) => {
-            return { genre: el, isSelected: false };
+            return { item: el, isSelected: false };
           });
           return newState;
         });
-    getInitData().then(r => {
-      let newState = {};
-      Object.entries(r).forEach(([key, value]) => {
-        newState[key] = value.map(el => {return {genre: el, isSelected: false}})
-      })
-      setInitData(newState)
-    })
   }, [])
 
   const selectFirstAnswer = (arg) => {
@@ -107,11 +97,12 @@ export const SerachBoard = ({
     setNextQuestion(true);
   };
 
-  const searchMovie = () => {
+  const searchMovie = (exactTitle) => {
     if (answers[0] == 'title' && text.length > 0) {
       closeWindow();
       setLoading(true);
-      handleSearchByTitle(text)
+      let constent = exactTitle ? exactTitle : text 
+      handleSearchByTitle(constent)
         .then((number) => {
           setResult(number);
           if (number === 0)
@@ -170,8 +161,8 @@ export const SerachBoard = ({
               shearchBtn={shearchBtn}
               goBack={goBack}
               answers={text}
+              wheelSetting={wheelSetting}
               searchMovie={searchMovie}
-              hints={initData.titles}
               question={'Insert your title:'}
             />
           )}
@@ -191,7 +182,6 @@ export const SerachBoard = ({
               shearchBtn={shearchBtn}
               goBack={goBack}
               answers={text}
-              hints={initData.directors}
               searchMovie={searchMovie}
               question={'Your lovly director is:'}
             />

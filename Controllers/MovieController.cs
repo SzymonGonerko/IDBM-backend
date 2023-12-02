@@ -13,45 +13,33 @@ namespace IDBM.Controllers
             _dbContext = dbContext;
         }
 
-
-        [HttpGet("getAllTitle")]
-        public ActionResult GetAllTitle()
+        [HttpPost("getSomeHints")]
+        public ActionResult<IEnumerable<Movie>> getSomeHints([FromBody] FrontendData data)
         {
+            var title = data.Title;
             var movies = _dbContext.Movies.ToList();
-            var titles = new List<string>();
-
-            foreach (var movie in movies)
+            var response = new List<string>();
+            var counter = 0;
+            try
             {
-                titles.Add(movie.Title);
-            }
-
-            MoviesList movieTitles = new MoviesList(titles);
-            return Ok(movieTitles.GroupedByTag);
-        }
-
-        [HttpGet("getAllDirectors")]
-        public ActionResult GetAllDirectors()
-        {
-            var movies = _dbContext.Movies.ToList();
-            var titles = new List<string>();
-            
-            foreach (var movie in movies)
-            {
-                List<string> arr = movie.Directors.Split(new char[] { ',' }).ToList();
-                foreach (var director in arr)
+                do
                 {
-                    var withoutBrackets = director.Replace("[", string.Empty).Replace("]", string.Empty);
-                    var withoutQuote = withoutBrackets.Replace("'", string.Empty).Replace("'", string.Empty);
-                    if (withoutQuote != "")
+                    if (movies[counter].Title.ToLower().Contains(title.ToLower()))
                     {
-                        titles.Add(withoutQuote);
+                        response.Add(movies[counter].Title);
                     }
-                }
+                    counter++;
+                    Console.WriteLine(counter.ToString());
+                    Console.CursorTop = 0;
+                   
+
+                } while (response.Count < 30 && counter <= movies.Count);
 
             }
-            var result = titles.Distinct().ToList();
-            MoviesList movieDirectors = new MoviesList(result);
-            return Ok(movieDirectors.GroupedByTag);
+            catch (Exception e) {
+                Console.WriteLine(e);
+            }
+            return Ok(response);
         }
 
 
@@ -61,7 +49,6 @@ namespace IDBM.Controllers
             var title = data.Title;
             var movies = _dbContext.Movies.
                 Where(x => x.Title == title.ToLower() || x.Title.Contains(title.ToLower())).ToList();
-            Console.WriteLine(title);
             return Ok(movies);
         }
 
@@ -74,7 +61,7 @@ namespace IDBM.Controllers
             {
                 if (rec.IsSelected)
                 {
-                    selected.Add(rec.Genre);
+                    selected.Add(rec.Item);
                 }
             }
             var movies = _dbContext.Movies.ToList();

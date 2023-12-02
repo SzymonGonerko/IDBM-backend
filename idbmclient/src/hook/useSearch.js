@@ -15,6 +15,18 @@ export const useSearch = () => {
     return {titles, directors}
   }
 
+  const getSomeHints = async title => {
+    let val = await axios({
+      method: 'post',
+      url: main + '/' + "getSomeHints",
+      data: {title}
+    }).then((r) => {
+        const arr = r.data
+        return arr;
+      });;
+    return val;
+  };
+
 
   const searchByTitle = async title => {
     let val = await axios({
@@ -56,5 +68,5 @@ export const useSearch = () => {
   return val;
   };
 
-  return { searchByTitle, searchByGenre, getInitData };
+  return { searchByTitle, searchByGenre, getInitData, getSomeHints };
 };

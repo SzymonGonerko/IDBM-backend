@@ -13,11 +13,19 @@ export const ActionButton = ({
   onPointerOver,
   onPointerOut
 }) => {
+
+  const click = (e) => {
+    e.stopPropagation()
+    onClick()
+  }
+
+
+
   return (
     <>
       <a.group
         position-z={z}
-        onClick={onClick}
+        onClick={(e) => click(e)}
         onPointerOut={onPointerOut}
         onPointerOver={onPointerOver}
       >

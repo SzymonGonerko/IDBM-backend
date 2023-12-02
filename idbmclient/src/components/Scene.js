@@ -73,6 +73,7 @@ export const Scene = () => {
       {parts[2] && (
         <Gallery
           data={movies}
+          wheelSetting={wheelSetting}
           goToNextPage={goToNextPage}
           backToSearchBoard={backToSearchBoard}
           position={[-5, 1, 304]}

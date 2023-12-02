@@ -39,5 +39,5 @@ export const useFocuse = () => {
     }
   };
 
-  return { handleFocuse, colorInput, enter, text, focuse };
+  return { handleFocuse, colorInput, enter, text, focuse, setText };
 };
