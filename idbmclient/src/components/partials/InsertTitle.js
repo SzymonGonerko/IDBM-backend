@@ -10,7 +10,7 @@ export const InsertTitle = ({ color, word }) => {
         <Text
           color={'black'}
           font={playBold}
-          position={[-1, 0, 0.11]}
+          position={[-0.95, 0, 0.11]}
           fontSize={0.19}
           letterSpacing={-0.04}
           anchorX="left"

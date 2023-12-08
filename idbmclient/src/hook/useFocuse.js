@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useSpring } from '@react-spring/three';
-import { a } from '@react-spring/three';
 
 const alphabet =
   'abcdefghijklmnopqrstuvwxyzżółćźąęń1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZŻÓŁĆŹĄĘŃ-:)()"?!&+=@ ';

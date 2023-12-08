@@ -16,9 +16,10 @@ export const Gallery = ({ position, data, goToNextPage, backToSearchBoard, wheel
   };
 
   useEffect(() => {
-    wheelSetting(8)
-    return () => wheelSetting(undefined)
-  }, [])
+    console.log(data)
+    wheelSetting(8);
+    return () => wheelSetting(undefined);
+  }, []);
 
   const pos = (num) => {
     if (num % 2 == 0) {

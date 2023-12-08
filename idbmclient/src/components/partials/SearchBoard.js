@@ -38,17 +38,18 @@ const genres = [
 export const SerachBoard = ({
   handleSearchByTitle,
   handleSearchByGenre,
+  handleSearchByDirector,
   closeWindow,
   openWindow,
   close,
   wheelSetting
 }) => {
-  const texture = useTexture(back)
-  const { handleFocuse, text, focuse, enter } = useFocuse();
+  const texture = useTexture(back);
+  const { handleFocuse, text, focuse, enter, setText } = useFocuse();
   const [answers, setAnswers] = useState(['', text]);
   const [nextQuestion, setNextQuestion] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [filter, setFilter] = useState(1)
+  const [filter, setFilter] = useState(1);
   const { scale, showSearchBtn, filters } = useSpring({
     showSearchBtn: text.length > 0 ? 1 : 0,
     filters: filter,
@@ -57,10 +58,9 @@ export const SerachBoard = ({
   });
   const scaleBoard = scale.to([0, 1], [1, 0]);
   const shearchBtn = showSearchBtn.to([0, 1], [0, 0.6]);
-  const testing = filters.to([0, 1, 2], ["#465046", "#645050", "#505064"]);
+  const testing = filters.to([0, 1, 2], ['#465046', '#645050', '#505064']);
   const [result, setResult] = useState(false);
   const [genresDetails, setGeneresDetails] = useState(genres);
-
 
   texture.wrapS = THREE.RepeatWrapping;
   texture.wrapT = THREE.RepeatWrapping;
@@ -70,22 +70,26 @@ export const SerachBoard = ({
     setGeneresDetails((p) => {
       const [...arr] = p;
       const newState = arr.map((el) => {
-            return { item: el, isSelected: false };
-          });
-          return newState;
-        });
-  }, [])
+        return { item: el, isSelected: false };
+      });
+      return newState;
+    });
+  }, []);
 
   const selectFirstAnswer = (arg) => {
+    setText('');
     setAnswers((p) => {
       const [...newState] = p;
       newState[0] = arg;
       return newState;
     });
     switch (arg) {
-      case 'title': return setFilter(0)
-      case 'genre': return setFilter(1)
-      case 'director': return setFilter(2)
+      case 'title':
+        return setFilter(0);
+      case 'genre':
+        return setFilter(1);
+      case 'director':
+        return setFilter(2);
     }
   };
 
@@ -101,8 +105,8 @@ export const SerachBoard = ({
     if (answers[0] == 'title' && text.length > 0) {
       closeWindow();
       setLoading(true);
-      let constent = exactTitle ? exactTitle : text 
-      handleSearchByTitle(constent)
+      let content = exactTitle ? exactTitle : text;
+      handleSearchByTitle(content)
         .then((number) => {
           setResult(number);
           if (number === 0)
@@ -120,19 +124,38 @@ export const SerachBoard = ({
     if (answers[0] == 'genre') {
       closeWindow();
       setLoading(true);
-      handleSearchByGenre(genresDetails).then((number) => {
-        setResult(number);
-        if (number === 0)
+      handleSearchByGenre(genresDetails)
+        .then((number) => {
+          setResult(number);
+          if (number === 0)
+            setTimeout(() => {
+              openWindow();
+              setLoading(false);
+            }, 2000);
+        })
+        .then(() => {
           setTimeout(() => {
-            openWindow();
             setLoading(false);
-          }, 2000);
-      })
-      .then(() => {
-        setTimeout(() => {
-          setLoading(false);
-        }, 5000);
-      });
+          }, 5000);
+        });
+    }
+    if (answers[0] == 'director' && text.length > 0) {
+      closeWindow();
+      setLoading(true);
+      handleSearchByDirector(text)
+        .then((number) => {
+          setResult(number);
+          if (number === 0)
+            setTimeout(() => {
+              openWindow();
+              setLoading(false);
+            }, 2000);
+        })
+        .then(() => {
+          setTimeout(() => {
+            setLoading(false);
+          }, 5000);
+        });
     }
   };
 
@@ -157,6 +180,7 @@ export const SerachBoard = ({
           {!nextQuestion && <FirstQuestion onSelect={selectFirstAnswer} onNext={onNext} />}
           {nextQuestion && answers[0] == 'title' && (
             <TypeSearcher
+              titles
               activeInput={focuse}
               shearchBtn={shearchBtn}
               goBack={goBack}
@@ -182,7 +206,9 @@ export const SerachBoard = ({
               shearchBtn={shearchBtn}
               goBack={goBack}
               answers={text}
+              wheelSetting={wheelSetting}
               searchMovie={searchMovie}
+              director
               question={'Your lovly director is:'}
             />
           )}

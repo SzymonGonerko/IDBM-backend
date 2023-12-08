@@ -11,7 +11,7 @@ import { useSearch } from '../hook/useSearch';
 
 export const Scene = () => {
   const cameraRef = useRef();
-  const { searchByTitle, searchByGenre } = useSearch();
+  const { searchByTitle, searchByGenre, searchByDirector } = useSearch();
   const { goToNextPage, goToSearch, goToGallery, moveTo, setParts, parts } =
     useCameraMove(cameraRef);
 
@@ -47,7 +47,19 @@ export const Scene = () => {
     if (response.length > 0)
       setTimeout(() => {
         goToGallery();
-        wheelSetting(8)
+        wheelSetting(8);
+        setParts([false, false, true]);
+      }, 3000);
+    return response.length;
+  };
+
+  const handleSearchByDirector = async (director) => {
+    let response = await searchByDirector(director);
+    setMovies(response);
+    if (response.length > 0)
+      setTimeout(() => {
+        goToGallery();
+        wheelSetting(8);
         setParts([false, false, true]);
       }, 3000);
     return response.length;
@@ -60,16 +72,17 @@ export const Scene = () => {
         mouseButtons={{ left: 8, middle: 8, right: 2, wheel: wheel }}
       />
       {parts[0] && <Hero onClick={goToSearch} />}
-      
-        <SerachBoard
-          closeWindow={() => setClose(true)}
-          openWindow={() => setClose(false)}
-          close={close}
-          handleSearchByTitle={handleSearchByTitle}
-          handleSearchByGenre={handleSearchByGenre}
-          wheelSetting={wheelSetting}
-        />
-        
+
+      <SerachBoard
+        closeWindow={() => setClose(true)}
+        openWindow={() => setClose(false)}
+        close={close}
+        handleSearchByTitle={handleSearchByTitle}
+        handleSearchByGenre={handleSearchByGenre}
+        handleSearchByDirector={handleSearchByDirector}
+        wheelSetting={wheelSetting}
+      />
+
       {parts[2] && (
         <Gallery
           data={movies}

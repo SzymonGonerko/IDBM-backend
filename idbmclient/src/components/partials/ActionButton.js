@@ -13,13 +13,10 @@ export const ActionButton = ({
   onPointerOver,
   onPointerOut
 }) => {
-
   const click = (e) => {
-    e.stopPropagation()
-    onClick()
-  }
-
-
+    e.stopPropagation();
+    onClick();
+  };
 
   return (
     <>

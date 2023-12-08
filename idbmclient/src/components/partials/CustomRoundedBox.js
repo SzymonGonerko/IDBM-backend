@@ -26,8 +26,8 @@ export const CustomRoundedBox = ({ onHover, portal, children, ...props }) => {
     >
       <RoundedBox {...props}>
         <a.meshStandardMaterial
-        transparent
-        opacity={0.8}
+          transparent
+          opacity={0.8}
           {...stencil}
           color={isSelected || hover ? (isSelected ? clickedColor : hoverColor) : color}
         />

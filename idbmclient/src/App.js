@@ -1,6 +1,5 @@
 import './App.css';
-import axios from 'axios';
-import React, { Suspense, useEffect, useRef } from 'react';
+import React, { Suspense } from 'react';
 import { Canvas, extend } from '@react-three/fiber';
 import { Effects } from '@react-three/drei';
 import { UnrealBloomPass } from 'three-stdlib';
@@ -25,7 +24,6 @@ const App = () => {
             args={[undefined, 1.1, 1, 0]}
           />
         </Effects>
-
         <Scene />
         <Ground position={[0, -1, 0]} />
       </Suspense>
