@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as THREE from 'three';
 import { RoundedBox, useTexture } from '@react-three/drei';
 import { FirstQuestion } from './FirstQuestions';
@@ -178,6 +178,7 @@ export const SerachBoard = ({
 
           <TopBar handleClose={closeWindow} />
           {!nextQuestion && <FirstQuestion onSelect={selectFirstAnswer} onNext={onNext} />}
+
           {nextQuestion && answers[0] == 'title' && (
             <TypeSearcher
               titles
@@ -198,6 +199,7 @@ export const SerachBoard = ({
               setGeneresDetails={setGeneresDetails}
               searchMovie={searchMovie}
               wheelSetting={wheelSetting}
+              question={'Choose your genres:'}
             />
           )}
           {nextQuestion && answers[0] == 'director' && (

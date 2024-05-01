@@ -6,29 +6,31 @@ import playBold from '../../assets/fonts/Play-Bold.ttf';
 import { a } from '@react-spring/three';
 
 export const PortalList = ({ data, setParentData, position, searchMovie }) => {
-  const [jj, setJj] = useState(-10);
+  const [shiftScroll, setShiftScroll] = useState(-10);
   const [boxPosition, setBoxPosition] = useState([]);
 
   const { x_coordinate } = useSpring({
-    x_coordinate: jj,
+    x_coordinate: shiftScroll,
     config: { tension: 150, friction: 100, precision: 0.00001 }
   });
   const shift = x_coordinate.to([0, 1], [0, 1]);
 
   const onWheel = (e) => {
+    const l = boxPosition.length;
+
+    const firstThreeElements = [boxPosition[0][0], boxPosition[1][0],boxPosition[2][0]]
+    const lastThreeElements = [boxPosition[l-3][0], boxPosition[l-2][0],boxPosition[l-1][0]]
+    const maxLeftPosition = Math.min(...firstThreeElements);
+    const maxRightPosition = Math.max(...lastThreeElements);
     if (e.deltaY < 0) {
-      setJj((p) => {
-        return p - 1;
-        if (p <= -3) return p;
-        else {
-        }
+      setShiftScroll((p) => {
+        if (p < -maxLeftPosition) return p + 1;
+        return p;
       });
     } else {
-      setJj((p) => {
-        return p + 1;
-        if (p >= 2) return p;
-        else {
-        }
+      setShiftScroll((p) => {
+        if (p < -maxRightPosition) return p;
+        return p - 1;
       });
     }
   };
@@ -69,11 +71,9 @@ export const PortalList = ({ data, setParentData, position, searchMovie }) => {
       }
     }
     let middleX = -(newArr[0][0] + newArr[newArr.length - 1][0]) / 2;
-    searchMovie ? setJj(middleX) : null;
+    searchMovie ? setShiftScroll(middleX) : null;
 
     setBoxPosition(newArr);
-    document.addEventListener('mousewheel', onWheel);
-    return () => document.removeEventListener('mousewheel', onWheel);
   }, [data]);
 
   const handleClick = (event, i) => {
@@ -90,13 +90,12 @@ export const PortalList = ({ data, setParentData, position, searchMovie }) => {
 
   return (
     <>
-      <group position={position}>
+      <group onWheel={(e) => onWheel(e)} position={position}>
         <mesh position={[0, 0, 0]}>
           <Mask id={1} colorWrite={true} position={[0, 0, 0]}>
             <boxGeometry args={[4.95, 2, 0.2]} />
             <meshStandardMaterial color={[0.05, 0.05, 0.05]} />
           </Mask>
-          <mesh position={[0, 0, 0]} scale={1}>
             <a.group position={[0, 0.1, 0]} position-x={shift}>
               {boxPosition.length > 0 &&
                 data?.map((el, i) => {
@@ -125,7 +124,6 @@ export const PortalList = ({ data, setParentData, position, searchMovie }) => {
                   );
                 })}
             </a.group>
-          </mesh>
         </mesh>
       </group>
     </>

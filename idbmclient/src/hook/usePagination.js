@@ -8,45 +8,10 @@ export const usePagination = (data, itemsByPage) => {
     setPage((p) => p - 1);
   };
 
-  const showMore = (goToNextPage) => {
-    let counter = 0;
-    list[page].forEach((el) => {
-      if (el !== undefined) {
-        el.isVisibile !== undefined ? counter++ : null;
-      }
-    });
-    setList((p) => {
-      const [...arr] = p;
-      for (let i = 0; i < counter + 3; i++) {
-        if (arr[page][i]) {
-          arr[page][i].isVisibile = true;
-        } else {
-          goToNextPage();
-        }
-      }
-      return arr;
-    });
-  };
-
-  const howManyLeft = () => {
-    let counter = 0;
-    list.forEach((el) => {
-      el.forEach((el) => {
-        if (el !== undefined) {
-          el.isVisibile == undefined ? counter++ : null;
-        }
-      });
-    });
-    return counter;
-  };
-
   const nextPage = () => {
     if (list.length < page + 2) return null;
     setList((p) => {
       const [...arr] = p;
-      for (let i = 0; i < 4; i++) {
-        arr[page + 1][i].isVisibile = true;
-      }
       return arr;
     });
     setPage((p) => p + 1);
@@ -65,13 +30,8 @@ export const usePagination = (data, itemsByPage) => {
         counter++;
       }
     }
-    for (let i = 0; i < 5; i++) {
-      if (arr[0][i]) {
-        arr[0][i].isVisibile = true;
-      }
-    }
     setList(arr);
   }, []);
 
-  return { list, page, nextPage, previousPage, howManyLeft, showMore };
+  return { list, page, nextPage, previousPage };
 };

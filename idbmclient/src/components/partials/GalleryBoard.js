@@ -1,10 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { RoundedBox, Text, Image } from '@react-three/drei';
+import { RoundedBox, Text, Image, MeshTransmissionMaterial } from '@react-three/drei';
 import { CustomRoundedBox } from './CustomRoundedBox';
-import axios from 'axios';
-import logo from '../../logo.svg';
-import { usePagination } from '../../hook/usePagination';
-import { MovieCard } from './MovieCard';
 import playBold from '../../assets/fonts/Play-Bold.ttf';
 
 export const GalleryBoard = ({ previousPage, nextPage, info, backToSearchBoard }) => {

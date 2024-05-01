@@ -12,8 +12,15 @@ import { useSearch } from '../hook/useSearch';
 export const Scene = () => {
   const cameraRef = useRef();
   const { searchByTitle, searchByGenre, searchByDirector } = useSearch();
-  const { goToNextPage, goToSearch, goToGallery, moveTo, setParts, parts } =
-    useCameraMove(cameraRef);
+  const {
+    goToSearch,
+    goToGallery,
+    moveTo,
+    setParts,
+    focuseOnMovieCard,
+    distractedOnMovieCard,
+    parts
+  } = useCameraMove(cameraRef);
 
   const [movies, setMovies] = useState([]);
   const [close, setClose] = useState(false);
@@ -69,7 +76,7 @@ export const Scene = () => {
     <>
       <CameraControls
         ref={cameraRef}
-        mouseButtons={{ left: 8, middle: 8, right: 2, wheel: wheel }}
+        mouseButtons={{ left: undefined, middle: 8, right: 2, wheel: wheel }}
       />
       {parts[0] && <Hero onClick={goToSearch} />}
 
@@ -87,8 +94,9 @@ export const Scene = () => {
         <Gallery
           data={movies}
           wheelSetting={wheelSetting}
-          goToNextPage={goToNextPage}
           backToSearchBoard={backToSearchBoard}
+          focuseOnMovieCard={focuseOnMovieCard}
+          distractedOnMovieCard={distractedOnMovieCard}
           position={[-5, 1, 304]}
         />
       )}

@@ -15,7 +15,7 @@ const App = () => {
       <fog attach="fog" args={['black', 10, 30]} />
       <ambientLight intensity={1.9} />
       <Suspense fallback={null}>
-        <Effects multisamping={0.2} stencilBuffer disableGamma>
+        <Effects multisamping={0.1} stencilBuffer disableGamma>
           <unrealBloomPass
             threshold={0.089}
             mipmapBlur

@@ -1,8 +1,5 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { extend } from '@react-three/fiber';
-import { TextGeometry } from 'three-stdlib';
-extend({ TextGeometry });
 
 export const useCameraMove = (reff) => {
   const [intro, setIntro] = useState(false);
@@ -14,12 +11,28 @@ export const useCameraMove = (reff) => {
     reff.current.setPosition(x, y, z, true);
   };
 
+  const focuseOnMovieCard = (position, fromAnother) => {
+    const ddd = position.x > -5 ? -1.85 : -8.15;
+    const cam = reff.current;
+    cam.smoothTime = 0.47;
+    if (fromAnother == undefined) cam.setTarget(-5, 1, reff.current.getPosition().z - 0.5);
+    cam.setLookAt(-5, 1, position.z + 2.5, ddd, 1, position.z, true);
+  };
+
+  const distractedOnMovieCard = async () => {
+    const cam = reff.current;
+    let afterMove = await cam
+      .setTarget(-5, 1, reff.current.getPosition().z - 0.5, true)
+      .then(() => cam.setTarget(-5, 1, 150));
+    return afterMove;
+  };
+
   const goToSearch = () => {
     setSearch(true);
     setTimeout(() => {
-      reff.current.smoothTime = 1.5;
+      reff.current.smoothTime = 1.1;
       reff.current.setLookAt(-5, 1, 320, -5, 1, 315, true).then(() => {
-        reff.current.setTarget(-5, 0, -300);
+        reff.current.setTarget(-5, 0, -320);
       });
     }, 10);
     setTimeout(() => {
@@ -35,7 +48,9 @@ export const useCameraMove = (reff) => {
   }, []);
 
   const goToGallery = () => {
-    reff.current.setLookAt(-5, 1, 310, -5, 1, -300, true);
+    reff.current.dollySpeed = 0.1;
+    reff.current.setTarget(-5, 1, 150);
+    reff.current.setLookAt(-5, 1, 310, -5, 1, 150, true);
   };
 
   useFrame((s) => {
@@ -47,19 +62,15 @@ export const useCameraMove = (reff) => {
     }
     if (reff.current.getPosition().z < 225 && search) {
       reff.current.setPosition(-5, 1, 320, true);
-      console.log(cameraRef.current);
     }
   });
 
-  const goToNextPage = () => {
-    reff?.current?.setPosition(-5, 1, 310, true);
-  };
-
   return {
-    goToNextPage,
     intro,
     search,
     endMoveCamera,
+    focuseOnMovieCard,
+    distractedOnMovieCard,
     goToSearch,
     goToGallery,
     parts,

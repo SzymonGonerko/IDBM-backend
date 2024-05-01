@@ -5,7 +5,7 @@ import { PortalList } from './PortalList.js';
 import { Question } from './Question.js';
 
 export const CheckSearcher = (props) => {
-  const { goBack, wheelSetting, searchMovie, genresDetails, setGeneresDetails } = props;
+  const { goBack, wheelSetting, searchMovie, genresDetails, setGeneresDetails, question } = props;
   const [onHoverBack, setOnHoverBack] = useState(false);
   const [onHoverSearch, setOnHoverSearch] = useState(false);
 
@@ -30,7 +30,7 @@ export const CheckSearcher = (props) => {
     <>
       <PortalList position={[0, -0.2, 0]} data={genresDetails} setParentData={setGeneresDetails} />
       <Question position={[-1.2, 0.8, 0.1]} args={[1.8, 0.28, 0.2]}>
-        Choose your genres:
+        {question}
       </Question>
 
       <ActionButton

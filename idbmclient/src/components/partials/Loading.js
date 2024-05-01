@@ -19,14 +19,14 @@ export const Loading = ({ result }) => {
   }, [result]);
 
   useFrame((state) => {
-    let gg = result > 0 || result === 0 ? 2 : 3;
-    const t = state.clock.getElapsedTime() * gg;
-    ref.current.position.set(Math.sin(t) * 1.2 - 5, Math.cos(t) * 1.2 + 1, 314);
+    const v = result > 0 || result === 0 ? 2.5 : 3.5;
+    const t = state.clock.getElapsedTime() * v;
+    ref.current.position.set(Math.sin(t) - 5, Math.cos(t) + 1, 314);
   });
 
   return (
     <>
-      <Trail local width={0.05} length={8} attenuation={(t) => t * t * 20} color={color} ref={tail}>
+      <Trail width={0.05} length={8} attenuation={(t) => t * 20} color={color} ref={tail}>
         <mesh ref={ref} />
 
         <Text position={[-5, 1, 314]} color={'#888888'} font={playRegular} fontSize={0.2}>
