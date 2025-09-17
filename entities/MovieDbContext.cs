@@ -4,12 +4,9 @@ namespace IDBM.entities
 {
     public class MovieDbContext : DbContext
     {
-        private string _connectionsString = "Server=(localdb)\\mssqllocaldb;Database=MoviesDb;Trusted_Connection=true;database=master";
-        public DbSet<Movie> Movies { get; set;}
+        public MovieDbContext(DbContextOptions<MovieDbContext> options)
+            : base(options) { }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-
-        }
+        public DbSet<Movie> Movies { get; set; }
     }
 }

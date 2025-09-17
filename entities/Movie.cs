@@ -4,32 +4,36 @@ namespace IDBM.entities
 {
     public class Movie
     {
-        public int? Id { get; set; }
-        [Name("title")]
+        public int Id { get; set; }
+
+        [Name("ID")]
+        public int IdWeb { get; set; }
+
+        [Name("Tytuł")]
         public string Title { get; set; }
 
-        [Name("year")]
-        public string Year { get; set; }
+        [Name("Opis")]
+        public string Description { get; set; }
 
-        [Name("directors")]
-        public string Directors { get; set; }
+        [Name("Rok")]
+        public int Year { get; set; }
 
-        [Name("actors")]
-        public string Actors { get; set; }
-
-        [Name("genre")]
+        [Name("Gatunek")]
         public string Genre { get; set; }
 
-        [Name("plot")]
-        public string Plot { get; set; }
+        [Name("Plakat")]
+        public string PosterUrl { get; set; }
 
-        [Name("poster")]
-        public string Poster { get; set; }
+        [Name("Aktorzy")]
+        public string Actors { get; set; }
 
-        [Name("countries")]
-        public string Countries { get; set; }
+        [Name("Reżyser")]
+        public string Director { get; set; }
 
-        [Name("url")]
-        public string Url { get; set; }
+        [Name("Trailer")]
+        public bool HasTrailer { get; set; }
+
+        [Name("Język")]
+        public string Language { get; set; }
     }
 }

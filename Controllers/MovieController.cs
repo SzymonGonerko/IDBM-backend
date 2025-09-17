@@ -1,122 +1,57 @@
-﻿using IDBM.entities;
-using IDBM.Migrations;
+﻿using IDBM.Services;
 using Microsoft.AspNetCore.Mvc;
-
 
 namespace IDBM.Controllers
 {
+    [ApiController]
     [Route("Movies")]
     public class MovieController : ControllerBase
     {
-        private MovieDbContext _dbContext;
-        public MovieController(MovieDbContext dbContext)
+        private readonly IMovieService _movieService;
+
+        public MovieController(IMovieService movieService)
         {
-            _dbContext = dbContext;
+            _movieService = movieService;
         }
 
-        [HttpPost("getSomeTitles")]
-        public ActionResult getSomeTitles([FromBody] FrontendData data)
+        [HttpGet("get_by-language/{language}")]
+        public async Task<IActionResult> GetMoviesByLanguage(string language)
         {
-            var title = data.Title;
-            var movies = _dbContext.Movies.ToList();
-            var response = new List<string>();
-            var counter = 0;
-            try
-            {
-                do
-                {
-                    if (movies[counter].Title.ToLower().Contains(title.ToLower()))
-                    {
-                        response.Add(movies[counter].Title);
-                    }
-                    counter++;
-                    Console.WriteLine(counter.ToString());
-                    Console.CursorTop = 0;
-                   
+            var movies = await _movieService.GetMoviesByLanguageAsync(language);
+            if (!movies.Any())
+                return NotFound(new { message = $"No movies found in language '{language}'." });
 
-                } while (response.Count < 30 && counter <= movies.Count);
-
-            }
-            catch (Exception e) {
-                Console.WriteLine(e);
-            }
-            return Ok(response);
-        }
-
-        [HttpPost("getSomeDirectors")]
-        public ActionResult getSomeDirectors([FromBody] FrontendData data)
-        {
-            var director = data.Director;
-            var directors = new List<string>();
-            var movies = _dbContext.Movies.ToList();
-            var counter = 0;
-            try
-            {
-                do
-                {
-                    if (movies[counter].Directors.ToLower().Contains(director.ToLower()))
-                    {
-                        var dir = movies[counter].Directors.Replace("[", "").Replace("]", "").Replace("'", "");
-                        if (dir.IndexOf(",") >= 0)
-                        {
-                            var firstPart = dir.Remove(dir.IndexOf(","));
-                            directors.Add(firstPart);
-                        } else
-                        {
-                            directors.Add(dir);
-                        }
-                    }
-                    counter++;
-                } while (directors.Count < 30 && counter <= movies.Count-1);
-
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
-            var response = directors.Distinct();
-            return Ok(response);
-        }
-
-
-        [HttpPost("getByTitle")]
-        public ActionResult GetTitle([FromBody] FrontendData data)
-        {
-            var title = data.Title;
-            var movies = _dbContext.Movies.
-                Where(x => x.Title == title.ToLower() || x.Title.Contains(title.ToLower())).ToList();
             return Ok(movies);
         }
 
-        [HttpPost("getByDirector")]
-        public ActionResult GetDirector([FromBody] FrontendData data)
+        [HttpGet("flatSearch")]
+        public async Task<IActionResult> FlatSearch([FromQuery] string text, [FromQuery] string language, [FromQuery] string typeData)
         {
-            var director = data.Director;
-            var movies = _dbContext.Movies.
-                Where(x => x.Directors == director.ToLower() || x.Directors.Contains(director.ToLower())).ToList();
-            return Ok(movies);
+            var results = await _movieService.FlatSearchAsync(text, language, typeData);
+            if (!results.Any())
+                return NotFound(new { message = "Sorry :( no hints found" });
+
+            return Ok(results);
         }
 
-
-        [HttpPost("getByGenres")]
-        public ActionResult GetGenre([FromBody] List<FrontendData> data)
+        [HttpGet("deepSearch")]
+        public async Task<IActionResult> DeepSearch([FromQuery] string text, [FromQuery] string language, [FromQuery] string typeData)
         {
-            var selected = new List<string>();
-            foreach (var rec in data)
-            {
-                if (rec.IsSelected)
-                {
-                    selected.Add(rec.Item);
-                }
-            }
-            var movies = _dbContext.Movies.ToList();
-            var result = new List<Movie>();
-            foreach (var rec in movies)
-            {
-                bool isContainsAll = selected.All(x => rec.Genre.Contains(x));
-                if (isContainsAll) { result.Add(rec); }
-            }
-            return Ok(result);
+            var results = await _movieService.DeepSearchAsync(text, language, typeData);
+            if (!results.Any())
+                return NotFound(new { message = "Sorry X( no movies found." });
+
+            return Ok(results);
+        }
+
+        [HttpGet("searchByGenresYears")]
+        public async Task<IActionResult> SearchByGenresYears([FromQuery] List<string> genres, [FromQuery] int startYear, [FromQuery] int endYear, [FromQuery] string language, [FromQuery] bool trailerOption)
+        {
+            var results = await _movieService.SearchByGenresYearsAsync(genres, startYear, endYear, language, trailerOption);
+            if (!results.Any())
+                return NotFound(new { message = "Sorry :( No movies for the given filters" });
+
+            return Ok(results);
         }
     }
 }
