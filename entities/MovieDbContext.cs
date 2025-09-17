@@ -11,10 +11,5 @@ namespace IDBM.entities
         {
 
         }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer(_connectionsString);
-        }
     }
 }
